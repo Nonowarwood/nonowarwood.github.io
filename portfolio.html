@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NONOWARWOOD — Portfolio</title>
+<meta name="description" content="Portfolio de Nonowarwood — edits, vidéos et petits sites web.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800;900&family=Archivo+Narrow:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f1eee6;
+    --paper-2: #eae6db;
+    --navy: #1e2a4a;
+    --navy-soft: rgba(30, 42, 74, .55);
+    --red: #8b2318;
+    --line: rgba(30, 42, 74, .35);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--paper);
+    color: var(--navy);
+    font-family: "Archivo", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+  }
+
+  /* grain papier */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    opacity: .5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='linear' slope='0.06'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 clamp(20px, 4vw, 56px); }
+
+  /* ---------- header ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: color-mix(in srgb, var(--paper) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 18px 0;
+    gap: 24px;
+  }
+
+  .topbar .brand,
+  .topbar .artist {
+    font-weight: 800;
+    letter-spacing: -.01em;
+    font-size: clamp(15px, 1.6vw, 20px);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .topbar .brand a { color: inherit; text-decoration: none; }
+
+  .topbar .artist { color: var(--red); }
+
+  .topbar nav {
+    display: flex;
+    gap: clamp(14px, 2.5vw, 32px);
+    margin-left: auto;
+  }
+
+  .topbar nav a {
+    color: var(--navy);
+    text-decoration: none;
+    font-family: "Archivo Narrow", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    opacity: .75;
+  }
+
+  .topbar nav a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+
+  /* ---------- hero ---------- */
+  .hero { padding: clamp(40px, 7vw, 90px) 0 0; }
+
+  .hero h1 {
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: -.03em;
+    line-height: .92;
+    font-size: clamp(48px, 10.5vw, 150px);
+  }
+
+  .hero h1 .thin { color: transparent; -webkit-text-stroke: 2px var(--navy); }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 28px;
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-top: clamp(24px, 4vw, 48px);
+    font-family: "Archivo Narrow", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--navy-soft);
+  }
+
+  .hero-meta strong { color: var(--navy); }
+
+  .hero-img {
+    margin-top: clamp(28px, 4vw, 56px);
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+
+  .hero-img img {
+    width: 100%;
+    display: block;
+    aspect-ratio: 3 / 1.55;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+
+  /* ---------- marquee ---------- */
+  .marquee {
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    padding: 12px 0;
+  }
+
+  .marquee .track {
+    display: flex;
+    width: max-content;
+    animation: slide 60s linear infinite;
+  }
+
+  .marquee .track span {
+    flex: none;
+    white-space: nowrap;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    font-size: 13px;
+    color: var(--red);
+    padding-right: 12px;
+  }
+
+  @keyframes slide {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---------- sections ---------- */
+  section { padding: clamp(56px, 8vw, 110px) 0; }
+
+  .sec-head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: baseline;
+    gap: 20px;
+    border-top: 2px solid var(--navy);
+    padding-top: 16px;
+    margin-bottom: clamp(30px, 4vw, 56px);
+  }
+
+  .sec-head .num {
+    font-weight: 900;
+    font-size: clamp(28px, 4vw, 48px);
+    letter-spacing: -.02em;
+  }
+
+  .sec-head h2 {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -.01em;
+    font-size: clamp(22px, 3.4vw, 40px);
+  }
+
+  .sec-head .sub {
+    grid-column: 2;
+    font-family: "Archivo Narrow", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--navy-soft);
+  }
+
+  /* à propos */
+  .concept {
+    display: grid;
+    grid-template-columns: 1.1fr .9fr;
+    gap: clamp(28px, 5vw, 70px);
+    align-items: start;
+  }
+
+  .concept p {
+    font-size: clamp(16px, 1.6vw, 19px);
+    line-height: 1.65;
+    font-weight: 500;
+    margin-bottom: 1em;
+  }
+
+  .concept p em { color: var(--red); font-style: normal; font-weight: 700; }
+
+  .concept .side img {
+    width: 100%;
+    display: block;
+    border: 1px solid var(--line);
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .concept .caption {
+    font-family: "Archivo Narrow", sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--navy-soft);
+    margin-top: 10px;
+  }
+
+  /* edits / vidéos */
+  .edits {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(14px, 2vw, 26px);
+  }
+
+  .edit {
+    border: 1px solid var(--line);
+    background: color-mix(in srgb, var(--paper-2) 60%, transparent);
+    display: flex;
+    flex-direction: column;
+    transition: border-color .15s ease;
+  }
+
+  .edit:hover { border-color: var(--navy); }
+
+  .edit .frame {
+    aspect-ratio: 1 / 1;
+    display: grid;
+    place-items: center;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+    background: var(--navy);
+  }
+
+  .edit .frame video,
+  .edit .frame img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .edit .label {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 14px;
+    font-family: "Archivo Narrow", sans-serif;
+    font-weight: 600;
+    font-size: 11.5px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+
+  .edit .label span:last-child { color: var(--navy-soft); }
+
+  .edits-note {
+    margin-top: 22px;
+    font-family: "Archivo Narrow", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--navy-soft);
+  }
+
+  .edits-note a { color: var(--red); }
+
+  /* sites web */
+  .projects { border-top: 1px solid var(--line); }
+
+  .project {
+    display: grid;
+    grid-template-columns: 70px 1fr auto;
+    align-items: baseline;
+    gap: 18px;
+    padding: 22px 4px;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--navy);
+    transition: background .15s ease, padding-left .15s ease;
+  }
+
+  .project:hover { background: var(--paper-2); padding-left: 14px; }
+
+  .project .no { font-weight: 900; font-size: 15px; color: var(--red); }
+
+  .project .title {
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .01em;
+    font-size: clamp(18px, 2.6vw, 30px);
+  }
+
+  .project .desc {
+    grid-column: 2;
+    font-family: "Archivo Narrow", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--navy-soft);
+  }
+
+  .project .tag {
+    font-family: "Archivo Narrow", sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--navy-soft);
+  }
+
+  /* réseaux */
+  .socials {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(16px, 2vw, 28px);
+  }
+
+  .social {
+    border: 1px solid var(--line);
+    padding: 24px;
+    text-decoration: none;
+    color: var(--navy);
+    background: color-mix(in srgb, var(--paper-2) 60%, transparent);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: border-color .15s ease, background .15s ease;
+  }
+
+  .social:hover { border-color: var(--navy); background: var(--paper-2); }
+
+  .social .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .social h3 {
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: clamp(20px, 2.6vw, 30px);
+    letter-spacing: -.01em;
+  }
+
+  .social .arrow { font-weight: 900; font-size: 22px; transition: transform .15s ease; }
+
+  .social:hover .arrow { transform: translate(4px, -2px); }
+
+  .social ul { list-style: none; border-top: 1px solid var(--line); }
+
+  .social li {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: "Archivo Narrow", sans-serif;
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+  }
+
+  .social li span:last-child { color: var(--navy-soft); white-space: nowrap; }
+
+  .social.red h3, .social.red .arrow { color: var(--red); }
+
+  /* footer */
+  footer {
+    border-top: 2px solid var(--navy);
+    padding: 30px 0 46px;
+  }
+
+  .foot {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 14px 30px;
+    font-family: "Archivo Narrow", sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--navy-soft);
+  }
+
+  .foot strong { color: var(--navy); }
+  .foot a { color: var(--red); text-decoration: none; }
+
+  /* responsive */
+  @media (max-width: 860px) {
+    .concept { grid-template-columns: 1fr; }
+    .edits { grid-template-columns: 1fr; }
+    .socials { grid-template-columns: 1fr; }
+    .project { grid-template-columns: 48px 1fr; }
+    .project .tag, .project .desc { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap topbar">
+    <span class="brand"><a href="./">Nonowarwood</a></span>
+    <nav>
+      <a href="#apropos">À propos</a>
+      <a href="#edits">Edits</a>
+      <a href="#web">Sites web</a>
+      <a href="#reseaux">Réseaux</a>
+    </nav>
+    <span class="artist">Portfolio</span>
+  </div>
+</header>
+
+<main>
+
+  <div class="wrap hero">
+    <h1>Nono<br><span class="thin">Warwood</span></h1>
+    <div class="hero-meta">
+      <span><strong>Créateur</strong> — Edits &amp; vidéos</span>
+      <span><strong>Aussi</strong> — Petits sites web</span>
+      <span><strong>Univers</strong> — K-pop · Pop culture</span>
+      <span><strong>Statut</strong> — Toujours en train de monter un truc</span>
+    </div>
+    <div class="hero-img">
+      <img src="background/1778658449888-6mp5gh-0.jpg" alt="Séance studio — inspiration">
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true">
+    <div class="track">
+      <span>Nonowarwood · Edits · Vidéos · Sites web · YouTube · TikTok · Instagram · Pinterest ·</span>
+      <span>Nonowarwood · Edits · Vidéos · Sites web · YouTube · TikTok · Instagram · Pinterest ·</span>
+      <span>Nonowarwood · Edits · Vidéos · Sites web · YouTube · TikTok · Instagram · Pinterest ·</span>
+      <span>Nonowarwood · Edits · Vidéos · Sites web · YouTube · TikTok · Instagram · Pinterest ·</span>
+      <span>Nonowarwood · Edits · Vidéos · Sites web · YouTube · TikTok · Instagram · Pinterest ·</span>
+      <span>Nonowarwood · Edits · Vidéos · Sites web · YouTube · TikTok · Instagram · Pinterest ·</span>
+      <span>Nonowarwood · Edits · Vidéos · Sites web · YouTube · TikTok · Instagram · Pinterest ·</span>
+      <span>Nonowarwood · Edits · Vidéos · Sites web · YouTube · TikTok · Instagram · Pinterest ·</span>
+    </div>
+  </div>
+
+  <section id="apropos" class="wrap">
+    <div class="sec-head">
+      <span class="num">01</span>
+      <h2>À propos</h2>
+      <span class="sub">Qui se cache derrière Nonowarwood</span>
+    </div>
+    <div class="concept">
+      <div>
+        <p>
+          Salut, moi c'est <em>Nono</em>. Je passe mon temps à créer : des
+          <em>edits</em> et des vidéos que je monte pour YouTube et TikTok,
+          des moodboards sur Pinterest, et des <em>petits sites web</em>
+          comme celui que tu es en train de regarder.
+        </p>
+        <p>
+          Mon univers : la K-pop, la pop culture, les direction artistiques
+          soignées — comme celle de cette page, inspirée des visuels
+          d'albums que j'adore.
+        </p>
+        <p>
+          Cette vitrine rassemble tout ce que je fais au même endroit.
+          Clique, regarde, abonne-toi si ça te plaît.
+        </p>
+      </div>
+      <div class="side">
+        <img src="background/1783480453913-p5wlxq-0.webp" alt="Portrait — inspiration">
+        <div class="caption">Fig. 01 — Moodboard · direction artistique</div>
+      </div>
+    </div>
+  </section>
+
+  <section id="edits" class="wrap">
+    <div class="sec-head">
+      <span class="num">02</span>
+      <h2>Edits &amp; vidéos</h2>
+      <span class="sub">Sélection — montés par mes soins</span>
+    </div>
+    <div class="edits">
+      <div class="edit">
+        <div class="frame">
+          <video src="edits/web/blink.mp4" controls preload="metadata" playsinline></video>
+        </div>
+        <div class="label"><span>01 — Blink!</span><span>0:19 · 1:1</span></div>
+      </div>
+      <div class="edit">
+        <div class="frame">
+          <video src="edits/web/my-boo.mp4" controls preload="metadata" playsinline></video>
+        </div>
+        <div class="label"><span>02 — My Boo</span><span>0:22 · 4:3</span></div>
+      </div>
+      <div class="edit">
+        <div class="frame">
+          <video src="edits/web/final-ver.mp4" controls preload="metadata" playsinline></video>
+        </div>
+        <div class="label"><span>03 — Bare Minimum</span><span>0:14 · 1:1</span></div>
+      </div>
+      <div class="edit">
+        <div class="frame">
+          <video src="edits/web/composition-1.mp4" controls preload="metadata" playsinline></video>
+        </div>
+        <div class="label"><span>04 — Dontoliver × Cortis</span><span>0:16 · 1:1</span></div>
+      </div>
+    </div>
+    <p class="edits-note">
+      Et il y en a plein d'autres sur
+      <a href="https://www.youtube.com/@Nonowarwood" target="_blank" rel="noopener">YouTube</a> et
+      <a href="https://www.tiktok.com/@nonowarwood" target="_blank" rel="noopener">TikTok</a>.
+    </p>
+  </section>
+
+  <section id="web" class="wrap">
+    <div class="sec-head">
+      <span class="num">03</span>
+      <h2>Sites web</h2>
+      <span class="sub">Petits projets — faits main</span>
+    </div>
+    <div class="projects">
+      <a class="project" href="https://nonowarwood.github.io/K-Shelf/" target="_blank" rel="noopener">
+        <span class="no">01</span>
+        <span class="title">K-Shelf</span>
+        <span class="tag">App web · En ligne</span>
+        <span class="desc">Ma bibliothèque d'albums physiques, en virtuel — pour cataloguer sa collection</span>
+      </a>
+      <a class="project" href="https://nonowarwood.github.io/Japan-bingo/" target="_blank" rel="noopener">
+        <span class="no">02</span>
+        <span class="title">Japan Bingo</span>
+        <span class="tag">Mini-site · En ligne</span>
+        <span class="desc">Un bingo à cocher, édition spéciale Japon</span>
+      </a>
+      <a class="project" href="https://nonowarwood.github.io/rpg/" target="_blank" rel="noopener">
+        <span class="no">03</span>
+        <span class="title">RPG</span>
+        <span class="tag">Jeu · En ligne</span>
+        <span class="desc">Un petit jeu de rôle qui tourne dans le navigateur</span>
+      </a>
+      <a class="project" href="https://nonowarwood.github.io/TuneWave/" target="_blank" rel="noopener">
+        <span class="no">04</span>
+        <span class="title">TuneWave</span>
+        <span class="tag">2026 · Premier site</span>
+        <span class="desc">Mon tout premier site web — projet de techno de seconde</span>
+      </a>
+      <a class="project" href="https://github.com/Nonowarwood" target="_blank" rel="noopener">
+        <span class="no">05</span>
+        <span class="title">Et la suite sur GitHub</span>
+        <span class="tag">@Nonowarwood</span>
+        <span class="desc">Tous mes projets, y compris cette vitrine</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="reseaux" class="wrap">
+    <div class="sec-head">
+      <span class="num">04</span>
+      <h2>Réseaux</h2>
+      <span class="sub">Retrouve-moi partout — @nonowarwood</span>
+    </div>
+    <div class="socials">
+      <a class="social red" href="https://www.youtube.com/@Nonowarwood" target="_blank" rel="noopener">
+        <div class="row"><h3>YouTube</h3><span class="arrow">↗</span></div>
+        <ul>
+          <li><span>Handle</span><span>@Nonowarwood</span></li>
+          <li><span>Contenu</span><span>Edits · Vidéos</span></li>
+        </ul>
+      </a>
+      <a class="social" href="https://www.tiktok.com/@nonowarwood" target="_blank" rel="noopener">
+        <div class="row"><h3>TikTok</h3><span class="arrow">↗</span></div>
+        <ul>
+          <li><span>Handle</span><span>@nonowarwood</span></li>
+          <li><span>Contenu</span><span>Edits · Shorts</span></li>
+        </ul>
+      </a>
+      <a class="social" href="https://www.instagram.com/nonowrwood/" target="_blank" rel="noopener">
+        <div class="row"><h3>Instagram</h3><span class="arrow">↗</span></div>
+        <ul>
+          <li><span>Handle</span><span>@nonowrwood</span></li>
+          <li><span>Contenu</span><span>Photos · Reels</span></li>
+        </ul>
+      </a>
+      <a class="social red" href="https://fr.pinterest.com/nonowarwood/" target="_blank" rel="noopener">
+        <div class="row"><h3>Pinterest</h3><span class="arrow">↗</span></div>
+        <ul>
+          <li><span>Handle</span><span>@nonowarwood</span></li>
+          <li><span>Contenu</span><span>Moodboards · Inspi</span></li>
+        </ul>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span><strong>Nonowarwood</strong> · Portfolio — Edits · Vidéos · Sites web</span>
+    <span>DA inspirée des visuels No Labels — photos d'illustration © leurs ayants droit</span>
+    <span><a href="./">← Tous mes liens</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
