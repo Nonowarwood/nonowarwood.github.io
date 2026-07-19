@@ -16,6 +16,7 @@
     --navy-soft: rgba(30, 42, 74, .55);
     --red: #8b2318;
     --line: rgba(30, 42, 74, .35);
+    --ease: cubic-bezier(.16, 1, .3, 1);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -89,9 +90,12 @@
     letter-spacing: .14em;
     text-transform: uppercase;
     opacity: .75;
+    padding-bottom: 3px;
+    background: linear-gradient(currentColor, currentColor) bottom left / 0 1px no-repeat;
+    transition: background-size .35s var(--ease), opacity .15s ease;
   }
 
-  .topbar nav a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+  .topbar nav a:hover { opacity: 1; background-size: 100% 1px; }
 
   /* ---------- hero ---------- */
   .hero { padding: clamp(40px, 7vw, 90px) 0 0; }
@@ -105,6 +109,18 @@
   }
 
   .hero h1 .thin { color: transparent; -webkit-text-stroke: 2px var(--navy); }
+
+  .hero h1 .line { display: block; overflow: hidden; }
+
+  .hero h1 .word {
+    display: inline-block;
+    transform: translateY(115%);
+    animation: hero-rise 1s var(--ease) .1s forwards;
+  }
+
+  .hero h1 .line:nth-child(2) .word { animation-delay: .22s; }
+
+  @keyframes hero-rise { to { transform: none; } }
 
   .hero-meta {
     display: flex;
@@ -120,6 +136,7 @@
     letter-spacing: .16em;
     text-transform: uppercase;
     color: var(--navy-soft);
+    animation: fade-up .9s var(--ease) .5s both;
   }
 
   .hero-meta strong { color: var(--navy); }
@@ -128,6 +145,8 @@
     margin-top: clamp(28px, 4vw, 56px);
     overflow: hidden;
     border: 1px solid var(--line);
+    clip-path: inset(0 0 100% 0);
+    animation: unveil 1.2s cubic-bezier(.65, 0, .35, 1) .55s forwards;
   }
 
   .hero-img img {
@@ -136,7 +155,18 @@
     aspect-ratio: 3 / 1.55;
     object-fit: cover;
     object-position: center 20%;
+    transform: scale(1.14);
+    animation: settle 1.8s var(--ease) .55s forwards;
   }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  @keyframes unveil { to { clip-path: inset(0 0 0 0); } }
+
+  @keyframes settle { to { transform: scale(1); } }
 
   /* ---------- marquee ---------- */
   .marquee {
@@ -175,10 +205,25 @@
     grid-template-columns: auto 1fr;
     align-items: baseline;
     gap: 20px;
-    border-top: 2px solid var(--navy);
+    position: relative;
     padding-top: 16px;
     margin-bottom: clamp(30px, 4vw, 56px);
   }
+
+  .sec-head::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: var(--navy);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 1.2s var(--ease) .15s;
+  }
+
+  .sec-head.in::before { transform: scaleX(1); }
 
   .sec-head .num {
     font-weight: 900;
@@ -250,10 +295,10 @@
     background: color-mix(in srgb, var(--paper-2) 60%, transparent);
     display: flex;
     flex-direction: column;
-    transition: border-color .15s ease;
+    transition: border-color .2s ease, box-shadow .3s var(--ease), opacity .9s var(--ease), transform .9s var(--ease);
   }
 
-  .edit:hover { border-color: var(--navy); }
+  .edit:hover { border-color: var(--navy); box-shadow: 8px 8px 0 rgba(30, 42, 74, .12); }
 
   .edit .frame {
     aspect-ratio: 1 / 1;
@@ -312,7 +357,7 @@
     border-bottom: 1px solid var(--line);
     text-decoration: none;
     color: var(--navy);
-    transition: background .15s ease, padding-left .15s ease;
+    transition: background .15s ease, padding-left .3s var(--ease), opacity .9s var(--ease), transform .9s var(--ease);
   }
 
   .project:hover { background: var(--paper-2); padding-left: 14px; }
@@ -361,10 +406,10 @@
     display: flex;
     flex-direction: column;
     gap: 16px;
-    transition: border-color .15s ease, background .15s ease;
+    transition: border-color .2s ease, background .2s ease, box-shadow .3s var(--ease), opacity .9s var(--ease), transform .9s var(--ease);
   }
 
-  .social:hover { border-color: var(--navy); background: var(--paper-2); }
+  .social:hover { border-color: var(--navy); background: var(--paper-2); box-shadow: 8px 8px 0 rgba(30, 42, 74, .12); }
 
   .social .row {
     display: flex;
@@ -425,6 +470,24 @@
   .foot strong { color: var(--navy); }
   .foot a { color: var(--red); text-decoration: none; }
 
+  /* ---------- apparitions au scroll ---------- */
+  [data-reveal] {
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity .9s var(--ease), transform .9s var(--ease);
+  }
+
+  [data-reveal].in { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    [data-reveal] { opacity: 1 !important; transform: none !important; }
+    .sec-head::before { transform: none !important; }
+    .hero h1 .word { transform: none; }
+    .hero-img { clip-path: none; }
+    .hero-img img { transform: none; }
+  }
+
   /* responsive */
   @media (max-width: 860px) {
     .concept { grid-template-columns: 1fr; }
@@ -453,7 +516,10 @@
 <main>
 
   <div class="wrap hero">
-    <h1>Nono<br><span class="thin">Warwood</span></h1>
+    <h1>
+      <span class="line"><span class="word">Nono</span></span>
+      <span class="line"><span class="word thin">Warwood</span></span>
+    </h1>
     <div class="hero-meta">
       <span><strong>Créateur</strong> — Edits &amp; vidéos</span>
       <span><strong>Aussi</strong> — Petits sites web</span>
@@ -479,13 +545,13 @@
   </div>
 
   <section id="apropos" class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
       <span class="num">01</span>
       <h2>À propos</h2>
       <span class="sub">Qui se cache derrière Nonowarwood</span>
     </div>
     <div class="concept">
-      <div>
+      <div data-reveal="1">
         <p>
           Salut, moi c'est <em>Nono</em>. Je passe mon temps à créer : des
           <em>edits</em> et des vidéos que je monte pour YouTube et TikTok,
@@ -502,7 +568,7 @@
           Clique, regarde, abonne-toi si ça te plaît.
         </p>
       </div>
-      <div class="side">
+      <div class="side" data-reveal="2">
         <img src="background/1783480453913-p5wlxq-0.webp" alt="Portrait — inspiration">
         <div class="caption">Fig. 01 — Moodboard · direction artistique</div>
       </div>
@@ -510,38 +576,38 @@
   </section>
 
   <section id="edits" class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
       <span class="num">02</span>
       <h2>Edits &amp; vidéos</h2>
       <span class="sub">Sélection — montés par mes soins</span>
     </div>
     <div class="edits">
-      <div class="edit">
+      <div class="edit" data-reveal="1">
         <div class="frame">
           <video src="edits/web/blink.mp4" controls preload="metadata" playsinline></video>
         </div>
         <div class="label"><span>01 — Blink!</span><span>0:19 · 1:1</span></div>
       </div>
-      <div class="edit">
+      <div class="edit" data-reveal="2">
         <div class="frame">
           <video src="edits/web/my-boo.mp4" controls preload="metadata" playsinline></video>
         </div>
         <div class="label"><span>02 — My Boo</span><span>0:22 · 4:3</span></div>
       </div>
-      <div class="edit">
+      <div class="edit" data-reveal="1">
         <div class="frame">
           <video src="edits/web/final-ver.mp4" controls preload="metadata" playsinline></video>
         </div>
         <div class="label"><span>03 — Bare Minimum</span><span>0:14 · 1:1</span></div>
       </div>
-      <div class="edit">
+      <div class="edit" data-reveal="2">
         <div class="frame">
           <video src="edits/web/composition-1.mp4" controls preload="metadata" playsinline></video>
         </div>
         <div class="label"><span>04 — Dontoliver × Cortis</span><span>0:16 · 1:1</span></div>
       </div>
     </div>
-    <p class="edits-note">
+    <p class="edits-note" data-reveal>
       Et il y en a plein d'autres sur
       <a href="https://www.youtube.com/@Nonowarwood" target="_blank" rel="noopener">YouTube</a> et
       <a href="https://www.tiktok.com/@nonowarwood" target="_blank" rel="noopener">TikTok</a>.
@@ -549,38 +615,32 @@
   </section>
 
   <section id="web" class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
       <span class="num">03</span>
       <h2>Sites web</h2>
       <span class="sub">Petits projets — faits main</span>
     </div>
     <div class="projects">
-      <a class="project" href="https://nonowarwood.github.io/K-Shelf/" target="_blank" rel="noopener">
+      <a class="project" data-reveal="1" href="https://nonowarwood.github.io/K-Shelf/" target="_blank" rel="noopener">
         <span class="no">01</span>
         <span class="title">K-Shelf</span>
         <span class="tag">App web · En ligne</span>
         <span class="desc">Ma bibliothèque d'albums physiques, en virtuel — pour cataloguer sa collection</span>
       </a>
-      <a class="project" href="https://nonowarwood.github.io/Japan-bingo/" target="_blank" rel="noopener">
+      <a class="project" data-reveal="2" href="https://nonowarwood.github.io/rpg/" target="_blank" rel="noopener">
         <span class="no">02</span>
-        <span class="title">Japan Bingo</span>
-        <span class="tag">Mini-site · En ligne</span>
-        <span class="desc">Un bingo à cocher, édition spéciale Japon</span>
-      </a>
-      <a class="project" href="https://nonowarwood.github.io/rpg/" target="_blank" rel="noopener">
-        <span class="no">03</span>
         <span class="title">RPG</span>
         <span class="tag">Jeu · En ligne</span>
         <span class="desc">Un petit jeu de rôle qui tourne dans le navigateur</span>
       </a>
-      <a class="project" href="https://nonowarwood.github.io/TuneWave/" target="_blank" rel="noopener">
-        <span class="no">04</span>
+      <a class="project" data-reveal="3" href="https://nonowarwood.github.io/TuneWave/" target="_blank" rel="noopener">
+        <span class="no">03</span>
         <span class="title">TuneWave</span>
         <span class="tag">2026 · Premier site</span>
         <span class="desc">Mon tout premier site web — projet de techno de seconde</span>
       </a>
-      <a class="project" href="https://github.com/Nonowarwood" target="_blank" rel="noopener">
-        <span class="no">05</span>
+      <a class="project" data-reveal="4" href="https://github.com/Nonowarwood" target="_blank" rel="noopener">
+        <span class="no">04</span>
         <span class="title">Et la suite sur GitHub</span>
         <span class="tag">@Nonowarwood</span>
         <span class="desc">Tous mes projets, y compris cette vitrine</span>
@@ -589,34 +649,34 @@
   </section>
 
   <section id="reseaux" class="wrap">
-    <div class="sec-head">
+    <div class="sec-head" data-reveal>
       <span class="num">04</span>
       <h2>Réseaux</h2>
       <span class="sub">Retrouve-moi partout — @nonowarwood</span>
     </div>
     <div class="socials">
-      <a class="social red" href="https://www.youtube.com/@Nonowarwood" target="_blank" rel="noopener">
+      <a class="social red" data-reveal="1" href="https://www.youtube.com/@Nonowarwood" target="_blank" rel="noopener">
         <div class="row"><h3>YouTube</h3><span class="arrow">↗</span></div>
         <ul>
           <li><span>Handle</span><span>@Nonowarwood</span></li>
           <li><span>Contenu</span><span>Edits · Vidéos</span></li>
         </ul>
       </a>
-      <a class="social" href="https://www.tiktok.com/@nonowarwood" target="_blank" rel="noopener">
+      <a class="social" data-reveal="2" href="https://www.tiktok.com/@nonowarwood" target="_blank" rel="noopener">
         <div class="row"><h3>TikTok</h3><span class="arrow">↗</span></div>
         <ul>
           <li><span>Handle</span><span>@nonowarwood</span></li>
           <li><span>Contenu</span><span>Edits · Shorts</span></li>
         </ul>
       </a>
-      <a class="social" href="https://www.instagram.com/nonowrwood/" target="_blank" rel="noopener">
+      <a class="social" data-reveal="1" href="https://www.instagram.com/nonowrwood/" target="_blank" rel="noopener">
         <div class="row"><h3>Instagram</h3><span class="arrow">↗</span></div>
         <ul>
           <li><span>Handle</span><span>@nonowrwood</span></li>
           <li><span>Contenu</span><span>Photos · Reels</span></li>
         </ul>
       </a>
-      <a class="social red" href="https://fr.pinterest.com/nonowarwood/" target="_blank" rel="noopener">
+      <a class="social red" data-reveal="2" href="https://fr.pinterest.com/nonowarwood/" target="_blank" rel="noopener">
         <div class="row"><h3>Pinterest</h3><span class="arrow">↗</span></div>
         <ul>
           <li><span>Handle</span><span>@nonowarwood</span></li>
@@ -635,6 +695,26 @@
     <span><a href="./">← Tous mes liens</a></span>
   </div>
 </footer>
+
+<script>
+  (function () {
+    var els = document.querySelectorAll("[data-reveal]");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !("IntersectionObserver" in window)) {
+      els.forEach(function (el) { el.classList.add("in"); });
+      return;
+    }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        var delay = (parseInt(el.dataset.reveal, 10) || 0) * 90;
+        setTimeout(function () { el.classList.add("in"); }, delay);
+        io.unobserve(el);
+      });
+    }, { threshold: .12, rootMargin: "0px 0px -6% 0px" });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+</script>
 
 </body>
 </html>
